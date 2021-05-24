@@ -1,0 +1,29 @@
+.landingPage {
+  padding: 2em 5em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.content {
+  width: 70ch;
+}
+
+.heading {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.subHeading {
+  margin-top: 1em;
+  font-size: 1.4rem;
+}
+
+img {
+  width: 600px;
+  height: auto;
+}
+
+.btnContainer {
+  text-align: center;
+}
