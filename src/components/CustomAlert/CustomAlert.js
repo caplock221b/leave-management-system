@@ -21,6 +21,7 @@ const CustomAlert = ({ isOpen, message, type }) => {
     <Snackbar
       open={open}
       autoHideDuration={4000}
+      anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       onClose={() => setOpen(false)}
     >
       <Alert

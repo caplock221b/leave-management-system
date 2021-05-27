@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react'
-import styles from './ManagePerson.module.css'
-import firebase from '../../../firebase'
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core'
-import PersonModal from '../PersonModal/PersonModal'
-import { Delete, Edit } from '@material-ui/icons'
+import { Add, Delete, Edit } from '@material-ui/icons'
+import React, { useEffect, useState } from 'react'
 import CustomAlert from '../../../components/CustomAlert/CustomAlert'
+import firebase from '../../../firebase'
+import PersonModal from '../PersonModal/PersonModal'
 
 const AddPerson = props => {
     const [modalOpen, setModalOpen] = useState(false)
@@ -168,8 +167,8 @@ const AddPerson = props => {
     }
 
     return (
-        <div className={styles.container}>
-            <button className={"btn " + styles.add} type="button" onClick={handleAddPersonClick}>Add {props.name}</button>
+        <div className="container">
+            <button className={"btn " + " add"} type="button" onClick={handleAddPersonClick}><Add /> <span>Add {props.name}</span></button>
             {
                 props.name === "Teacher" && teacherItems?.length ?
                 <TableContainer component={Paper}>
@@ -231,7 +230,7 @@ const AddPerson = props => {
                         </TableBody>
                     </Table>
                 </TableContainer> :
-                <div className={styles.center}>You haven't added any {props.name}s yet!</div>
+                <div className="center">You haven't added any {props.name}s yet!</div>
             }
             {
                 modalOpen &&

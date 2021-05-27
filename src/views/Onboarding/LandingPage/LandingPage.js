@@ -10,7 +10,7 @@ const LandingPage = () => {
                 <div className={styles.heading}>Want to let your superiors know about your leaves in advance?</div>
                 <div className={styles.subHeading}>Leave Management System helps organizations manage leaves in an efficient way.</div>
                 <div className={styles.btnContainer}>
-                    <Link to="/signin"><button>Get Started</button></Link>
+                    <Link to="/signin"><button className="btn">Get Started</button></Link>
                 </div>
             </div>
             <div className={styles.image}>
