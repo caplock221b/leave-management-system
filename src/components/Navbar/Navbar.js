@@ -54,9 +54,26 @@ const Navbar = () => {
         })
     }
 
+    const getDashboardName = () => {
+        switch(location.pathname){
+            case '/student':
+                return `Student Dashboard`
+            case '/teacher':
+                return `Teacher Dashboard`
+            case '/admin':
+                return `Admin Dashboard`
+            default:
+                return null
+        }
+    }
+
     return (
         <nav className={styles.nav}>
             <Link to="/" className={styles.logo}>{`<LMS />`}</Link>
+            {
+                location.pathname.includes("teacher") || location.pathname.includes("student") || location.pathname.includes("admin") ?
+                <span className={styles.dashname}>{getDashboardName()}</span> : null
+            }
             <ul className={styles.navUl}>
                 {
                     location.pathname.includes("teacher") || location.pathname.includes("student") || location.pathname.includes("admin") ?

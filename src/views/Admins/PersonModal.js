@@ -1,6 +1,6 @@
 import { TextField } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
-import CustomAlert from '../../../components/CustomAlert/CustomAlert'
+import CustomAlert from '../../components/CustomAlert/CustomAlert'
 
 const PersonModal = props => {
     const [values, setValues] = useState({

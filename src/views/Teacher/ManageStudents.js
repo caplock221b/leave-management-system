@@ -1,44 +1,24 @@
 import { Add } from '@material-ui/icons';
 import React, { useEffect, useState } from 'react'
-import StudentModal from '../StudentModal';
-import firebase from '../../../firebase'
-import CustomAlert from '../../../components/CustomAlert/CustomAlert';
+import StudentModal from './StudentModal';
+import firebase from '../../firebase'
+import CustomAlert from '../../components/CustomAlert/CustomAlert';
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core'
 
-const ManageStudents = () => {
+const ManageStudents = props => {
     const [modalOpen, setModalOpen] = useState(false)
-    const [students, setStudents] = useState(null)
 
     const [alert, setAlert] = useState({
         isOpen: false,
         type: 'error',
         message: ''
     })
-
-    useEffect(() => {
-        getStudents()
-    }, [])
     
     useEffect(() => {
         if(alert.isOpen){
             setTimeout(() => setAlert({...alert, isOpen: false}), 4000)
         }
     }, [alert.isOpen])
-    
-    const getStudents = () => {
-        const userRef = firebase.database().ref('users')
-        let values = []
-        userRef.on('value', (snapshot) => {
-            let users = snapshot.val()
-            for(let t in users){
-                if(users[t].type === "student" && users[t].addedBy === sessionStorage.getItem("id")){
-                    values.push({id: t, ...users[t]})
-                }
-            }
-            values = values.sort((a, b) => a.roll > b.roll ? 1 : -1)
-            setStudents(values)
-        })
-    }
 
     const handleSubmit = payload => {
         setModalOpen(false)
@@ -59,23 +39,19 @@ const ManageStudents = () => {
             else{
                 setAlert({
                     isOpen: true,
-                    message: 'New Student added succeefully!',
+                    message: 'New Student added successfully!',
                     type: 'success'
                 })
             }
         })
-        getStudents()
+        props.reload()
     }
-
-    useEffect(() => {
-        console.log(students);
-    }, [students])
 
     return (
         <div className="container">
             <button className="btn add" type="button" onClick={() => setModalOpen(true)}><Add /> <span>Add Student</span></button>
             {
-                students?.length ?
+                props.data?.length ?
                 <TableContainer component={Paper}>
                     <Table aria-label="simple table">
                         <TableHead>
@@ -88,7 +64,7 @@ const ManageStudents = () => {
                         </TableHead>
                         <TableBody>
                             {
-                                students.map(i => {
+                                props.data.map(i => {
                                     return (
                                         <TableRow key={i.id}>
                                             <TableCell>{i.roll}</TableCell>

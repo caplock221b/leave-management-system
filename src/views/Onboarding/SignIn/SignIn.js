@@ -84,7 +84,7 @@ const SignIn = () => {
                         <MenuItem value="admin">Admin</MenuItem>
                     </Select>
                 </FormControl>
-                <button className="btn" type="submit">Sign In</button>
+                <button className="btn add" type="submit">Sign In</button>
             </form>
             <div className="image">
                 <img src={image} alt="Sign in" />

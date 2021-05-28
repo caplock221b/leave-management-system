@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
 import Sidebar from '../../components/Sidebar/Sidebar'
-import ManagePerson from './ManagePerson/ManagePerson'
+import ManagePerson from './ManagePerson'
 
 const Admin = () => {
     const history = useHistory()

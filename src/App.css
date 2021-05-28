@@ -15,16 +15,22 @@ body {
   background-color: white;
 }
 
-/* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
-/* Firefox */
 input[type="number"] {
   -moz-appearance: textfield;
+}
+
+#type-label {
+  background-color: white !important;
+}
+
+.Mui-disabled {
+  color: #555 !important;
 }
 
 a,
@@ -125,6 +131,10 @@ a:focus {
   width: 600px;
 }
 
+.add-leave {
+  width: 700px;
+}
+
 .close {
   position: absolute;
   cursor: pointer;
@@ -162,4 +172,12 @@ thead > tr > * {
 
 .actions > svg:first-child {
   margin-left: 0;
+}
+
+.error {
+  background-color: #f44336;
+}
+
+.success {
+  background-color: #4caf50;
 }

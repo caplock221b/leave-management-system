@@ -1,9 +1,9 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core'
 import { Add, Delete, Edit } from '@material-ui/icons'
 import React, { useEffect, useState } from 'react'
-import CustomAlert from '../../../components/CustomAlert/CustomAlert'
-import firebase from '../../../firebase'
-import PersonModal from '../PersonModal/PersonModal'
+import CustomAlert from '../../components/CustomAlert/CustomAlert'
+import firebase from '../../firebase'
+import PersonModal from './PersonModal'
 
 const AddPerson = props => {
     const [modalOpen, setModalOpen] = useState(false)
