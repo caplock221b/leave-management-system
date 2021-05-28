@@ -1,4 +1,4 @@
-import { Add, Visibility } from '@material-ui/icons'
+import { Add, Delete, Visibility } from '@material-ui/icons'
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
 import CustomAlert from '../../components/CustomAlert/CustomAlert'
@@ -61,7 +61,7 @@ const ManageLeaves = () => {
                 setAlert({
                     isOpen: true,
                     type: 'success',
-                    message: 'New Leave Application added successfully!'
+                    message: 'Leave application added successfully!'
                 })
             }
             setModalData(null)
@@ -78,6 +78,27 @@ const ManageLeaves = () => {
     const handleViewClick = data => {
         setModalData(data)
         setModalOpen(true)
+    }
+    
+    const handleDeleteClick = id => {
+        const leaveRef = firebase.database().ref(`/leaves/${id}`)
+        leaveRef.remove(err => {
+            if(err){
+                setAlert({
+                    isOpen: true,
+                    type: 'error',
+                    message: 'Something went wrong!'
+                })
+            }
+            else{
+                setAlert({
+                    isOpen: true,
+                    type: 'success',
+                    message: 'Leave application deleted successfully!'
+                })
+            }
+        })
+        getLeaves()
     }
 
     return (
@@ -109,6 +130,10 @@ const ManageLeaves = () => {
                                             <TableCell>{i.status}</TableCell>
                                             <TableCell className="actions">
                                                 <Visibility color="primary" onClick={() => handleViewClick(i)} />
+                                                {
+                                                    i.status === "Pending" &&
+                                                    <Delete color="error" onClick={() => handleDeleteClick(i.id)} />
+                                                }
                                             </TableCell>
                                         </TableRow>
                                     )
