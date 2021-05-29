@@ -5,6 +5,7 @@ import CustomAlert from '../../components/CustomAlert/CustomAlert'
 const PersonModal = props => {
     const [values, setValues] = useState({
         username: props.data ? props.data.username : '',
+        email: props.data ? props.data.email : '',
         password: '',
         confirmPassword: ''
     })
@@ -54,6 +55,17 @@ const PersonModal = props => {
                     </div>
                     <div className="content">
                         <TextField 
+                            type="email" 
+                            label="Email"
+                            variant="outlined"
+                            value={values.email}
+                            onChange={e => setValues({ ...values, email: e.target.value })}
+                            disabled={props.data ? true : false}
+                            required
+                        />
+                    </div>
+                    <div className="content">
+                        <TextField 
                             type="password" 
                             label="Password"
                             variant="outlined"
@@ -73,7 +85,7 @@ const PersonModal = props => {
                         />
                     </div>
                     <div className="content">
-                        <button className="btn" type="submit">Save</button>
+                        <button className="btn add" type="submit">Save</button>
                     </div>
                 </form>
             </div>

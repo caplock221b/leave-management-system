@@ -34,9 +34,9 @@ const ViewLeaveModal = props => {
                     <div className="content">
                         <TextField 
                             type="text" 
-                            label="Roll Number"
+                            label={`${props.data.roll ? "Roll Number" : "Username"}`}
                             variant="outlined"
-                            value={props.data.roll}
+                            value={props.data.roll ? props.data.roll : props.data.username}
                             disabled
                         />
                         <TextField 

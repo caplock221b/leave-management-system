@@ -1,5 +1,5 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core'
-import { Add, Delete, Edit } from '@material-ui/icons'
+import { Add, Delete, Edit, PortraitSharp } from '@material-ui/icons'
 import React, { useEffect, useState } from 'react'
 import CustomAlert from '../../components/CustomAlert/CustomAlert'
 import firebase from '../../firebase'
@@ -8,58 +8,18 @@ import PersonModal from './PersonModal'
 const AddPerson = props => {
     const [modalOpen, setModalOpen] = useState(false)
     const [modalData, setModalData] = useState(null)
-    const [teacherItems, setTeacherItems] = useState(null)
-    const [adminItems, setAdminItems] = useState(null)
 
     const [alert, setAlert] = useState({
         isOpen: false,
         type: 'error',
         message: ''
     })
-    
-    const getTeachers = () => {
-        const teacherRef = firebase.database().ref('users')
-        let values = []
-        teacherRef.on('value', (snapshot) => {
-            let teachers = snapshot.val()
-            for(let t in teachers){
-                if(teachers[t].type === "teacher" && teachers[t].addedBy === sessionStorage.getItem("id")){
-                    values.push({id: t, ...teachers[t]})
-                }
-            }
-            setTeacherItems(values)
-        })
-    }
-
-    const getAdmins = () => {
-        const adminRef = firebase.database().ref('users')
-        let values = []
-        adminRef.on('value', (snapshot) => {
-            let admins = snapshot.val()
-            for(let t in admins){
-                if(admins[t].type === "admin" && admins[t].addedBy === sessionStorage.getItem("id")){
-                    values.push({id: t, ...admins[t]})
-                }
-            }
-            setAdminItems(values)
-        })
-    }
 
     useEffect(() => {
         if(alert.isOpen){
           setTimeout(() => setAlert({...alert, isOpen: false}), 4000)
         }
     }, [alert.isOpen])
-
-
-    useEffect(() => {
-        if(props.name === 'Teacher'){
-          getTeachers()  
-        }
-        else{
-            getAdmins()
-        }
-    }, [props.name])
 
     const handleAddPersonClick = () => {
         setModalData(null)
@@ -78,6 +38,7 @@ const AddPerson = props => {
             const newUser = {
                 username: payload.username,
                 password: payload.password,
+                email: payload.email,
                 type: props.name === "Teacher" ? 'teacher' : 'admin',
                 addedBy: sessionStorage.getItem("id")
             }
@@ -97,12 +58,7 @@ const AddPerson = props => {
                     })
                 }
             })
-            if(props.name === "Teacher"){
-                getTeachers()
-            }
-            else{
-                getAdmins()
-            }
+            props.reload()
         }
         else{
             setModalData(null)
@@ -126,12 +82,7 @@ const AddPerson = props => {
                     })
                 }
             })
-            if(props.name === "Teacher"){
-                getTeachers()
-            }
-            else{
-                getAdmins()
-            }
+            props.reload()
         }
     }
 
@@ -158,67 +109,32 @@ const AddPerson = props => {
                 })
             }
         })
-        if(props.name === "Teacher"){
-            getTeachers()
-        }
-        else{
-            getAdmins()
-        }
+        props.reload()
     }
 
     return (
         <div className="container">
             <button className={"btn " + " add"} type="button" onClick={handleAddPersonClick}><Add /> <span>Add {props.name}</span></button>
             {
-                props.name === "Teacher" && teacherItems?.length ?
+                props.data?.length ?
                 <TableContainer component={Paper}>
                     <Table aria-label="simple table">
                         <TableHead>
                             <TableRow>
                                 <TableCell>ID</TableCell>
                                 <TableCell>Username</TableCell>
-                                <TableCell>Password</TableCell>
+                                <TableCell>Email</TableCell>
                                 <TableCell>Actions</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             {
-                                teacherItems.map(i => {
+                                props.data.map(i => {
                                     return (
                                         <TableRow key={i.id}>
                                             <TableCell>{i.id}</TableCell>
                                             <TableCell>{i.username}</TableCell>
-                                            <TableCell>{i.password}</TableCell>
-                                            <TableCell className="actions">
-                                                <Edit color="primary" onClick={() => handleEditClick(i)} />
-                                                <Delete color="error" onClick={() => handleDeleteClick(i.id)} />
-                                            </TableCell>
-                                        </TableRow>
-                                    )
-                                })
-                            }
-                        </TableBody>
-                    </Table>
-                </TableContainer> :
-                props.name === "Admin" && adminItems?.length ?
-                <TableContainer component={Paper}>
-                    <Table aria-label="simple table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>ID</TableCell>
-                                <TableCell>Username</TableCell>
-                                <TableCell>Password</TableCell>
-                                <TableCell>Actions</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {
-                                adminItems.map(i => {
-                                    return (
-                                        <TableRow key={i.id}>
-                                            <TableCell>{i.id}</TableCell>
-                                            <TableCell>{i.username}</TableCell>
-                                            <TableCell>{i.password}</TableCell>
+                                            <TableCell>{i.email}</TableCell>
                                             <TableCell className="actions">
                                                 <Edit color="primary" onClick={() => handleEditClick(i)} />
                                                 <Delete color="error" onClick={() => handleDeleteClick(i.id)} />

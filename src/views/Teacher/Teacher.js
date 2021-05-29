@@ -4,12 +4,14 @@ import Sidebar from '../../components/Sidebar/Sidebar'
 import ManageStudents from './ManageStudents'
 import firebase from '../../firebase'
 import ManageStudentLeaves from './ManageStudentLeaves'
+import MyLeaves from './MyLeaves'
 
 const Teacher = () => {
     const history = useHistory()
     const [step, setStep] = useState(1)
     const [students, setStudents] = useState(null)
-    const [leaves, setLeaves] = useState(null)
+    const [studentLeaves, setStudentLeaves] = useState(null)
+    const [myLeaves, setMyLeaves] = useState(null)
 
     useEffect(() => {
         if(sessionStorage.getItem("type") !== "teacher"){
@@ -17,27 +19,30 @@ const Teacher = () => {
         }
         else{
             getStudents()
+            getMyLeaves()
         }
     }, [])
     
     useEffect(() => {
         if(students){
-            getLeaves()
+            getStudentLeaves()
         }
     }, [students])
 
     useEffect(() => {
-        if(leaves){
-            console.log(leaves);
+        if(studentLeaves){
+            console.log(studentLeaves);
         }
-    }, [leaves])
+    }, [studentLeaves])
 
     const getComponent = () => {
         switch(step){
             case 1:
                 return <ManageStudents data={students} reload={getStudents} />
             case 2:
-                return <ManageStudentLeaves data={leaves} reload={getLeaves} />
+                return <ManageStudentLeaves data={studentLeaves} reload={getStudentLeaves} />
+            case 3:
+                return <MyLeaves data={myLeaves} reload={getMyLeaves} />
         }
     }
 
@@ -57,7 +62,7 @@ const Teacher = () => {
     }
 
 
-    const getLeaves = () => {
+    const getStudentLeaves = () => {
         const leaveRef = firebase.database().ref('leaves')
         const validIds = students.map(s => s.id)
         let values = []
@@ -70,7 +75,22 @@ const Teacher = () => {
                 }
             }
             values = values.sort((a, b) => a.from > b.from ? 1 : -1)
-            setLeaves(values)
+            setStudentLeaves(values)
+        })
+    }
+
+    const getMyLeaves = () => {
+        const leaveRef = firebase.database().ref('leaves')
+        let values = []
+        leaveRef.on('value', (snapshot) => {
+            let leaveItems = snapshot.val()
+            for(let t in leaveItems){
+                if(leaveItems[t].addedBy === sessionStorage.getItem("id")){
+                    values.push({id: t, ...leaveItems[t]})
+                }
+            }
+            values = values.sort((a, b) => a.from < b.from ? 1 : -1)
+            setMyLeaves(values)
         })
     }
 
@@ -79,7 +99,8 @@ const Teacher = () => {
             <Sidebar>
                 <ul>
                     <li className={step === 1 ? 'active' : ''} onClick={() => setStep(1)}>Manage Students</li>
-                    <li className={step === 2 ? 'active' : ''} onClick={() => setStep(2)}>Manage Leaves</li>
+                    <li className={step === 2 ? 'active' : ''} onClick={() => setStep(2)}>Student Leaves</li>
+                    <li className={step === 3 ? 'active' : ''} onClick={() => setStep(3)}>My Leaves</li>
                 </ul>
             </Sidebar>
             <div className="layoutPanel">
